@@ -1,0 +1,2 @@
+Failed to process https://www.miniorange.com/wordpress-pricing - Error: selenium package not found, please install it with `pip install selenium`
+Failed to process https://www.miniorange.com/wordpress-pricing - Error: unstructured package not found, please install it with `pip install unstructured`
