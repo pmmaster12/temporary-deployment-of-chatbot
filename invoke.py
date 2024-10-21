@@ -60,6 +60,7 @@ chain = chain.chain1(retrieval[0])
     # temp=sentiment_analysis.sentiment(result)
     # print(temp)
     # if('does not' in result or 'Unfortunately'  in result):
+        
     #   result1=chain[1].invoke(query)
     #   print("response:",result1)
     #   response_time = time.time() - t
@@ -140,8 +141,17 @@ def process_input(inp):
 
         # Dummy chain.invoke function for processing
         op = chain[0].invoke({'question':inp,'context':retrieval[0]})
+        print(type(op))
+        temp1=""
+        try:
+         result1=chain[1].invoke(inp)
+         print(type(result1['output']))
+         temp=result1['output']
+         print(temp)
+        except Exception as e:
+            print(f"exception occur due to {e}")
       #   op = chain.invoke(inp)
-
+         
         # If no chat is selected, start a new chat
         if st.session_state.selected_chat is None:
             st.session_state.first_question = inp
