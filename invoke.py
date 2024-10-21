@@ -21,6 +21,7 @@ import sounddevice as sd
 import speech_recognition as sr
 import streamlit.components.v1 as components
 import speech_recognition as sr
+import sentiment_analysis
 # Streamlit App
 # st.title("miniOrange Support : 24 X 7 Guide")
 
@@ -141,8 +142,9 @@ def process_input(inp):
 
         # Dummy chain.invoke function for processing
         op = chain[0].invoke({'question':inp,'context':retrieval[0]})
-        print(type(op))
-        temp1=""
+      #   print(type(op))
+        flag=sentiment_analysis.sentiment(op)
+        
         try:
          result1=chain[1].invoke(inp)
          print(type(result1['output']))
@@ -190,12 +192,12 @@ def display_messages(chat_sessions):
             recent_exchanges.insert(0, selected_messages[i-1])
             recent_exchanges.insert(1, selected_messages[i])
 
-        st.write("### Chat History")
+      #   st.write("### Chat History")
         for sender, message in recent_exchanges:
             st.write(f"**{sender}:** {message}")
             st.write("===========================================================================")
     else:
-        st.write("No chat selected.")
+        pass
 
 def load_chat_history_from_cookies():
     params = st.query_params
@@ -268,13 +270,16 @@ st.markdown("""
             display: flex;
             justify-content: center;
             align-items: center;
+            alignment:center;
         }
         .header img {
             max-width: 300px;
             height: auto;
+            alignment:center;
         }
         .content {
             margin-top: 100px; 
+            alignment:center;
         }
     </style>
 """, unsafe_allow_html=True)
