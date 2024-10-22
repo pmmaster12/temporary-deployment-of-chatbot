@@ -22,6 +22,7 @@ import speech_recognition as sr
 import streamlit.components.v1 as components
 import speech_recognition as sr
 import sentiment_analysis
+import TTS
 # Streamlit App
 # st.title("miniOrange Support : 24 X 7 Guide")
 
@@ -144,6 +145,8 @@ def process_input(inp):
         op = chain[0].invoke({'question':inp,'context':retrieval[0]})
       #   print(type(op))
         flag=sentiment_analysis.sentiment(op)
+        # voice output for the project
+        # op1=TTS.TTS(op)
         
         try:
          result1=chain[1].invoke(inp)
