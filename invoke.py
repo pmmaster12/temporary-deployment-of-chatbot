@@ -23,6 +23,8 @@ import streamlit.components.v1 as components
 import speech_recognition as sr
 import sentiment_analysis
 import time
+import pygsheets 
+import google_sheet_connector
 # import TTS
 # Streamlit App
 # st.title("miniOrange Support : 24 X 7 Guide")
@@ -32,6 +34,18 @@ warnings.filterwarnings("ignore")
 retrieval = retriver.retrieval()
 
 chain = chain.chain1(retrieval[0])
+
+# Importing required library 
+
+  
+# Create the Client 
+# client = pygsheets.authorize(service_account_file="chatbot-responses-3fbcd29275d3.json") 
+  
+# # opens a spreadsheet by its name/title 
+# spreadsht = client.open("chatbot responses")
+# spreadsht.cell("A1").set_text_format("bold", True).value = "Query"
+# spreadsht.cell("A2").set_text_format("bold", True).value = "Response"
+# spreadsht.cell("A3").set_text_format("bold", True).value = "Time Taken"
 
 # Input mode selection
 # input_mode = st.radio("Choose input mode:", ("Voice", "Text"))
@@ -157,6 +171,8 @@ def process_input(inp):
       
              writer=csv.writer(file)
              writer.writerow([inp,op,time3])
+
+    google_sheet_connector.google_sheet_connector(inp,op,time3)
     
         # voice output for the project
         # op1=TTS.TTS(op)
