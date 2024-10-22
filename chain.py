@@ -20,6 +20,7 @@ from langchain_google_community import GoogleSearchAPIWrapper
 from langchain_core.tools import Tool
 import warnings
 import huggingface_pipeline_integration
+from langchain.prompts import PromptTemplate
 warnings.filterwarnings("ignore")
 # Initialize LLM once to avoid redundancy
 # llm = ChatGroq(
@@ -41,10 +42,10 @@ tool = Tool(
 api_wrapper=WikipediaAPIWrapper(top_k_results=1,doc_content_chars_max=200)
 wiki=WikipediaQueryRun(api_wrapper=api_wrapper)
 
-search=DuckDuckGoSearchRun(name="Search",description = "A wrapper around DuckDuckGo Search Useful for when you need to answer where Input should be a search query.")
+search=DuckDuckGoSearchRun(name="Search",description = "A wrapper around DuckDuckGo Search Useful for when you need to answer where Input should be a search query.return me the valid URLs for the query")
 temp=retriver.retrieval()
 #tools=[search,wikipedia]
-tools=[tool]
+tools=[search]
 
 
  
@@ -71,14 +72,19 @@ def chain1(retriever):
     Provide these alternative questions separated by newlines.
     Original question:{question}
             """,
-)
+) 
+#     prompt_template="""
+# Provide a summary of the following content in 300 words:
+# Content:{text}
 
+# """ 
+    
     # Define the main response template
     response_template = """
            You are an AI assistant acting as a customer support agent and cybersecurity specialist for miniOrange.
             Your task is to provide a precise,detailed and accurate answer to the user’s question based *only* on the following context. 
             Your should prompt everything you have regarding user question from the context with proper format.
-            If the context does not provide sufficient infor4mation, then just say don't have sufficient information.
+            If the context does not provide sufficient information, then just say don't have sufficient information.
             Your answer should reflect how an actual customer agent would talk, ensuring user satisfaction.
          
                context:   {context}
@@ -87,7 +93,9 @@ def chain1(retriever):
 """
 
     # Create the prompt using ChatPromptTemplate
-    prompt = ChatPromptTemplate.from_template(response_template)
+    
+    prompt=PromptTemplate(template=response_template,input_variables=["question","context"])
+    # prompt = ChatPromptTemplate.from_template(response_template)
 
     # Construct the chain
     chain = (

@@ -24,4 +24,4 @@ def TTS(response):
 # Playing the converted file
  return os.system("start welcome.mp3")
 
-# x=TTS("tu chutiya hai")
+x=TTS("hello welcome to miniorange i am a support agent")

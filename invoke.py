@@ -22,7 +22,8 @@ import speech_recognition as sr
 import streamlit.components.v1 as components
 import speech_recognition as sr
 import sentiment_analysis
-import TTS
+import time
+# import TTS
 # Streamlit App
 # st.title("miniOrange Support : 24 X 7 Guide")
 
@@ -82,7 +83,7 @@ chain = chain.chain1(retrieval[0])
      
            
 
-    # Calculate the response timea
+    # Calculate the response timea47
    
     
     # Display the result and response time
@@ -142,27 +143,43 @@ def process_input(inp):
         st.session_state.user_input = inp
 
         # Dummy chain.invoke function for processing
+        time1=time.time()
         op = chain[0].invoke({'question':inp,'context':retrieval[0]})
       #   print(type(op))
         flag=sentiment_analysis.sentiment(op)
+    if(flag==False):
+        op=chain[1].invoke(inp)
+        
+        
+    time2=time.time()-time1
+    time3=f"**Time taken:** {time2:.2f} seconds"
+    with open('predicted_text.csv','a') as file:
+      
+             writer=csv.writer(file)
+             writer.writerow([inp,op,time3])
+    
         # voice output for the project
         # op1=TTS.TTS(op)
         
-        try:
-         result1=chain[1].invoke(inp)
-         print(type(result1['output']))
-         temp=result1['output']
-         print(temp)
-        except Exception as e:
-            print(f"exception occur due to {e}")
+        # try:
+        #  result1=chain[1].invoke(inp)
+        #  print(type(result1['output']))
+        #  temp=result1['output']
+        #  print(temp)
+        # except Exception as e:
+        #     print(f"exception occur due to {e}")
       #   op = chain.invoke(inp)
          
         # If no chat is selected, start a new chat
-        if st.session_state.selected_chat is None:
+    if st.session_state.selected_chat is None:
             st.session_state.first_question = inp
-            st.session_state.chat_sessions.append((inp, [("You", inp), ("Assistant", op)]))
+            st.session_state.chat_sessions.append((inp, [("You", inp), ("Bot", op)]))
+             #  try:
+            
+   #  except Exception as e:
+   #     print(f"exception occure due to {e}")
             st.session_state.selected_chat = inp
-        else:
+    else:
             # Find the current chat session
             for idx, (fq, messages) in enumerate(st.session_state.chat_sessions):
                 if fq == st.session_state.selected_chat:
@@ -170,11 +187,11 @@ def process_input(inp):
                     break
 
         # Save chat history to cookies after every input
-        save_chat_history_to_cookies()
+    save_chat_history_to_cookies()
 
         # Reset input
-        st.session_state.input_disabled = False
-        st.session_state.user_input = ""
+    st.session_state.input_disabled = False
+    st.session_state.user_input = ""
 
 def new_chat():
     st.session_state.messages = []
