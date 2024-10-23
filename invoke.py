@@ -25,7 +25,7 @@ import sentiment_analysis
 import time
 import pygsheets 
 import google_sheet_connector
-# import TTS
+import TTS
 # Streamlit App
 # st.title("miniOrange Support : 24 X 7 Guide")
 
@@ -175,7 +175,7 @@ def process_input(inp):
     google_sheet_connector.google_sheet_connector(inp,op,time3)
     
         # voice output for the project
-        # op1=TTS.TTS(op)
+    op1=TTS.TTS(op)
         
         # try:
         #  result1=chain[1].invoke(inp)
