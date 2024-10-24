@@ -46,7 +46,7 @@ def retrieval() :
 
     # Check if retriever is already initialized
     # retriever = MultiQueryRetriever.from_llm(
-    ret=vector_db_new.as_retriever(search_type="similarity",kwargs={'k':50,'fetch_k':319,'lambda_build':0.5})
+    ret=vector_db_new.as_retriever(search_type="similarity",kwargs={'k':50,'fetch_k':343,'lambda_build':0.5})
             # llm,
             # prompt=QUERY_PROMPT
         # ) 

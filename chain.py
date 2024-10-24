@@ -21,6 +21,7 @@ from langchain_core.tools import Tool
 import warnings
 import huggingface_pipeline_integration
 from langchain.prompts import PromptTemplate
+from langchain.retrievers.multi_query import MultiQueryRetriever
 warnings.filterwarnings("ignore")
 # Initialize LLM once to avoid redundancy
 # llm = ChatGroq(
@@ -99,10 +100,15 @@ def chain1(retriever):
     
     prompt=PromptTemplate(template=response_template,input_variables=["question","context"])
     # prompt = ChatPromptTemplate.from_template(response_template)
+    retriever1 = MultiQueryRetriever.from_llm(
+        temp, 
+        llm,
+        prompt=QUERY_PROMPT
+    )
 
     # Construct the chain
     chain = (
-        {"context": retriever, "question": RunnablePassthrough()}
+        {"context": retriever1, "question": RunnablePassthrough()}
         | prompt
         | llm
         | StrOutputParser()
