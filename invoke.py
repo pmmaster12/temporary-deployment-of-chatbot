@@ -203,6 +203,7 @@ def process_input(inp):
                     break
 
         # Save chat history to cookies after every input
+        # 
     save_chat_history_to_cookies()
 
         # Reset input
