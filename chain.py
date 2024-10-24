@@ -101,7 +101,7 @@ def chain1(retriever):
     prompt=PromptTemplate(template=response_template,input_variables=["question","context"])
     # prompt = ChatPromptTemplate.from_template(response_template)
     retriever1 = MultiQueryRetriever.from_llm(
-        temp, 
+        temp[0], 
         llm,
         prompt=QUERY_PROMPT
     )
