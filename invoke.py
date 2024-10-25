@@ -160,10 +160,10 @@ def process_input(inp):
         time1=time.time()
         op = chain[0].invoke({'question':inp,'context':retrieval[0]})
       #   print(type(op))
-        flag=sentiment_analysis.sentiment(op)
-    if(flag==False):
-        op=chain[1].invoke(inp)
-        op=op['output']
+    #     flag=sentiment_analysis.sentiment(op)
+    # if(flag==False):
+    #     op=chain[1].invoke(inp)
+    #     op=op['output']
         
     time2=time.time()-time1
     time3=f"**Time taken:** {time2:.2f} seconds"

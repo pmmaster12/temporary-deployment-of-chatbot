@@ -21,7 +21,6 @@ from langchain_core.tools import Tool
 import warnings
 import huggingface_pipeline_integration
 from langchain.prompts import PromptTemplate
-from langchain.retrievers.multi_query import MultiQueryRetriever
 warnings.filterwarnings("ignore")
 # Initialize LLM once to avoid redundancy
 # llm = ChatGroq(
@@ -51,16 +50,16 @@ tools=[search]
 
  
 # #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
-llm = ChatGroq(
-     groq_api_key="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",
-#     model="llama3-8b-8192",
-#     temperature=0,
-#     max_tokens=100,
-#     timeout=None,
-#     max_retries=2,
-#     # other params...
-)
-# llm=huggingface_pipeline_integration.model()
+# llm = ChatGroq(
+#      groq_api_key="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",
+# #     model="llama3-8b-8192",
+# #     temperature=0,
+# #     max_tokens=100,
+# #     timeout=None,
+# #     max_retries=2,
+# #     # other params...
+# )
+llm=huggingface_pipeline_integration.model()
 search_agent=initialize_agent(tools,llm,agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,handling_parsing_errors=True)
 def chain1(retriever):
     # Define the query prompt
@@ -100,15 +99,15 @@ def chain1(retriever):
     
     prompt=PromptTemplate(template=response_template,input_variables=["question","context"])
     # prompt = ChatPromptTemplate.from_template(response_template)
-    retriever1 = MultiQueryRetriever.from_llm(
-        temp[0], 
-        llm,
-        prompt=QUERY_PROMPT
-    )
+    # retriever = MultiQueryRetriever.from_llm(
+    #     vector_db_new.as_retriever(), 
+    #     llm,
+    #     prompt=QUERY_PROMPT
+    # )
 
     # Construct the chain
     chain = (
-        {"context": retriever1, "question": RunnablePassthrough()}
+        {"context": retriever, "question": RunnablePassthrough()}
         | prompt
         | llm
         | StrOutputParser()
