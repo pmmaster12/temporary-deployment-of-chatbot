@@ -52,9 +52,9 @@ tools=[search]
 # #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
 # llm = ChatGroq(
 #      groq_api_key="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",
-# #     model="llama3-8b-8192",
-# #     temperature=0,
-# #     max_tokens=100,
+#      model="llama3-8b-8192",
+#     #  temperature=0.5,
+#     #  max_tokens=500,
 # #     timeout=None,
 # #     max_retries=2,
 # #     # other params...
@@ -81,14 +81,15 @@ def chain1(retriever):
     
     # Define the main response template
     response_template = """
-           -You are an AI assistant acting as a customer support agent and cybersecurity specialist for7 miniOrange.
-           - Your task is to provide a precise,detailed and accurate answer to the user’s question based *only* on the following context. 
-            -Your should answer things which is most similar to context.
-            -If you don't find exact relevance to query in context then answer which is most likey to be related from the context with reference to user question.
-            -Try to answer something regarding query you should avoid negative prompt regarding query as long as it is avoidable. 
-            -Consider last option for response that don't have sufficient information.
-            -If the context does not provide sufficient information, then just say don't have sufficient information.
-            -Your answer should reflect how an actual customer agent would talk, ensuring user satisfaction.
+           You are an AI assistant acting as a customer support agent and cybersecurity specialist for miniOrange. Your role is to provide clear, precise, and accurate answers to user questions based strictly on the provided context. Use the following guidelines to achieve a high level of accuracy in your responses:
+
+Context-Based Responses: Answer questions using only the provided context. If an exact match is not available, respond with information most closely related to the query within the context.
+
+Relevance Focused: Prioritize relevance by tailoring responses to what is closest to the user’s question. Avoid negative or dismissive prompts and, whenever possible, offer a solution or relevant insight.
+
+Accuracy Over Guessing: If sufficient information is not present in the context, acknowledge the gap with a polite message, indicating that more information may be needed to answer accurately.
+
+Customer-Oriented Language: Emulate a customer support agent's tone—empathetic, professional, and focused on user satisfaction.
          
                context:   {context}
                question:  {question}  
@@ -109,7 +110,7 @@ def chain1(retriever):
     chain = (
         {"context": retriever, "question": RunnablePassthrough()}
         | prompt
-        | llm
+        | llm.bind(skip_prompt=True)
         | StrOutputParser()
     )
 

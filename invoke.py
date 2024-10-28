@@ -159,7 +159,10 @@ def process_input(inp):
         # Dummy chain.invoke function for processing
         time1=time.time()
         op = chain[0].invoke({'question':inp,'context':retrieval[0]})
-      #   print(type(op))
+        print(type(op))
+        
+        
+      #   print(type(op)
     #     flag=sentiment_analysis.sentiment(op)
     # if(flag==False):
     #     op=chain[1].invoke(inp)
@@ -167,7 +170,7 @@ def process_input(inp):
         
     time2=time.time()-time1
     time3=f"**Time taken:** {time2:.2f} seconds"
-    with open('predicted_text.csv','a') as file:
+    with open('predicted_text.csv','a', encoding='utf-8') as file:
       
              writer=csv.writer(file)
              writer.writerow([inp,op,time3])
