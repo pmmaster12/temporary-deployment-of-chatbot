@@ -36,7 +36,7 @@ def duckduckgo_search_and_summarize(query):
     summary_prompt = search_prompt_template.format(topic=summarized_results)
     
     # Here you would call your language model
-    model_output = llm(summary_prompt)  # assuming openai_complete is your function to interact with the model.
+    model_output = llm(summary_prompt)  # assuming openai_complete is your fu   nction to interact with the model.
     return model_output
 
 x=duckduckgo_search_and_summarize("iam vs pam")

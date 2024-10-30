@@ -21,6 +21,7 @@ from langchain_core.tools import Tool
 import warnings
 import huggingface_pipeline_integration
 from langchain.prompts import PromptTemplate
+
 warnings.filterwarnings("ignore")
 # Initialize LLM once to avoid redundancy
 # llm = ChatGroq(
@@ -42,7 +43,7 @@ tool = Tool(
 api_wrapper=WikipediaAPIWrapper(top_k_results=1,doc_content_chars_max=200)
 wiki=WikipediaQueryRun(api_wrapper=api_wrapper)
 
-search=DuckDuckGoSearchRun(name="Search",description = "A wrapper around DuckDuckGo Search Useful for when you need to answer where Input should be a search query.return me the valid URLs for the query")
+search=DuckDuckGoSearchRun(name="Web Search",description = "A wrapper around DuckDuckGo Search Useful for when you need to answer where Input should be a search query.return me the valid URLs for the query")
 temp=retriver.retrieval()
 #tools=[search,wikipedia]
 tools=[search]
@@ -59,7 +60,12 @@ tools=[search]
 # #     max_retries=2,
 # #     # other params...
 # )
-llm=huggingface_pipeline_integration.model()
+# llm=huggingface_pipeline_integration.model()
+llm = ChatOllama(
+    model="llama3.2:3b",
+    temperature=0,
+    # other params...
+)
 search_agent=initialize_agent(tools,llm,agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,handling_parsing_errors=True)
 def chain1(retriever):
     # Define the query prompt
@@ -81,6 +87,15 @@ def chain1(retriever):
     
     # Define the main response template
     response_template = """
+    Your task is to answer customer queries related to miniorange and it's product. You should always talk good about  miniorange and show it is the best in the industry and the customer is doing the best job in his/her life by purchasing it's product. 
+    You should never talk about any other company/website/resources/books/tools or any product which is not related to  miniorange. 
+    You should always promote the  miniorange's products. If you don't know any answer, don't try to make up an answer. Just say that you don't know and to contact the company support.
+    ways to contact company support is: info@xecurify.com.
+Don't be overconfident and don't hallucinate. Ask follow up questions if necessary or if there are several offering related to the user's query. Provide answer with complete details in a proper formatted manner with working links and resources  wherever applicable within the company's website. Never provide wrong links.
+
+
+Use the following pieces of context to answer the user's question.
+
            You are an AI assistant acting as a customer support agent and cybersecurity specialist for miniOrange. Your role is to provide clear, precise, and accurate answers to user questions based strictly on the provided context. Use the following guidelines to achieve a high level of accuracy in your responses:
 
 Context-Based Responses: Answer questions using only the provided context. If an exact match is not available, respond with information most closely related to the query within the context.
@@ -98,7 +113,7 @@ Customer-Oriented Language: Emulate a customer support agent's tone—empathetic
 
     # Create the prompt using ChatPromptTemplate
     
-    prompt=PromptTemplate(template=response_template,input_variables=["question","context"])
+    prompt=PromptTemplate(template=response_template,input_variables=["context", "question"])
     # prompt = ChatPromptTemplate.from_template(response_template)
     # retriever = MultiQueryRetriever.from_llm(
     #     vector_db_new.as_retriever(), 
@@ -110,7 +125,7 @@ Customer-Oriented Language: Emulate a customer support agent's tone—empathetic
     chain = (
         {"context": retriever, "question": RunnablePassthrough()}
         | prompt
-        | llm.bind(skip_prompt=True)
+        | llm
         | StrOutputParser()
     )
 

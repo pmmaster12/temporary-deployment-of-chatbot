@@ -25,6 +25,7 @@ import sentiment_analysis
 import time
 import pygsheets 
 import google_sheet_connector
+import multiaiagent
 # import TTS
 # Streamlit App
 # st.title("miniOrange Support : 24 X 7 Guide")
@@ -158,8 +159,13 @@ def process_input(inp):
 
         # Dummy chain.invoke function for processing
         time1=time.time()
-        op = chain[0].invoke({'question':inp,'context':retrieval[0]})
-        print(type(op))
+        op = chain[0].invoke({'context':retrieval[0],'question':inp})
+        # flag=sentiment_analysis.sentiment(op)
+        # if(flag==False):
+        op1=multiaiagent.multiagent().invoke(inp)
+        op1=op1['output']
+        # print(type(op))
+        
         
         
       #   print(type(op)
@@ -194,7 +200,7 @@ def process_input(inp):
         # If no chat is selected, start a new chat
     if st.session_state.selected_chat is None:
             st.session_state.first_question = inp
-            st.session_state.chat_sessions.append((inp, [("You", inp), ("Bot", op)]))
+            st.session_state.chat_sessions.append((inp, [("You", inp), ("Bot", op),("web search result",op1)]))
              #  try:
             
    #  except Exception as e:
@@ -204,7 +210,7 @@ def process_input(inp):
             # Find the current chat session
             for idx, (fq, messages) in enumerate(st.session_state.chat_sessions):
                 if fq == st.session_state.selected_chat:
-                    st.session_state.chat_sessions[idx] = (fq, messages + [("You", inp), ("Assistant", op)])
+                    st.session_state.chat_sessions[idx] = (fq, messages + [("You", inp), ("Assistant", op),("web search result",op1)])
                     break
 
         # Save chat history to cookies after every input
