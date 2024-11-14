@@ -159,11 +159,12 @@ def process_input(inp):
 
         # Dummy chain.invoke function for processing
         time1=time.time()
-        op = chain[0].invoke({'context':retrieval[0],'question':inp})
+        op = chain[0].invoke(inp)
+        print(type(op))
         # flag=sentiment_analysis.sentiment(op)
         # if(flag==False):
-        op1=multiaiagent.multiagent().invoke(inp)
-        op1=op1['output']
+        # op1=multiaiagent.multiagent().invoke(inp)
+        # op1=op1['output']
         # print(type(op))
         
         
@@ -200,7 +201,7 @@ def process_input(inp):
         # If no chat is selected, start a new chat
     if st.session_state.selected_chat is None:
             st.session_state.first_question = inp
-            st.session_state.chat_sessions.append((inp, [("You", inp), ("Bot", op),("web search result",op1)]))
+            st.session_state.chat_sessions.append((inp, [("You", inp), ("Bot", op)]))
              #  try:
             
    #  except Exception as e:
@@ -210,7 +211,7 @@ def process_input(inp):
             # Find the current chat session
             for idx, (fq, messages) in enumerate(st.session_state.chat_sessions):
                 if fq == st.session_state.selected_chat:
-                    st.session_state.chat_sessions[idx] = (fq, messages + [("You", inp), ("Assistant", op),("web search result",op1)])
+                    st.session_state.chat_sessions[idx] = (fq, messages + [("You", inp), ("Assistant", op)])
                     break
 
         # Save chat history to cookies after every input

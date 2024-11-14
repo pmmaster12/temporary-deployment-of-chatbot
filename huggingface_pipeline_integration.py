@@ -8,4 +8,3 @@ def model():
  pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=5000)
  hf = HuggingFacePipeline(pipeline=pipe)
  return hf
- 

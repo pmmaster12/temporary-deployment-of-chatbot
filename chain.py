@@ -51,21 +51,21 @@ tools=[search]
 
  
 # #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
-# llm = ChatGroq(
-#      groq_api_key="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",
-#      model="llama3-8b-8192",
-#     #  temperature=0.5,
-#     #  max_tokens=500,
-# #     timeout=None,
-# #     max_retries=2,
-# #     # other params...
-# )
-# llm=huggingface_pipeline_integration.model()
-llm = ChatOllama(
-    model="llama3.2:3b",
-    temperature=0,
-    # other params...
+llm = ChatGroq(
+     groq_api_key="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",
+     model="llama3-8b-8192",
+    #  temperature=0.5,
+    #  max_tokens=500,
+#     timeout=None,
+#     max_retries=2,
+#     # other params...
 )
+# llm=huggingface_pipeline_integration.model()
+# # llm = ChatOllama(
+# #     model="llama3.2:3b",
+# #     temperature=0,
+# #     # other params...
+# # )
 search_agent=initialize_agent(tools,llm,agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,handling_parsing_errors=True)
 def chain1(retriever):
     # Define the query prompt

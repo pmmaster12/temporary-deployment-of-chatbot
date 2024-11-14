@@ -86,5 +86,3 @@ If it's information retrieval task, solve it like a professor in particular fiel
     memory=memory,
 )
  return agent
-
-# print(type(output))
