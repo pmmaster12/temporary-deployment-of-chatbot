@@ -60,12 +60,12 @@ tools=[search]
 # #     max_retries=2,
 # #     # other params...
 # )
-llm=huggingface_pipeline_integration.model()
-# # llm = ChatOllama(
-# #     model="llama3.2:3b",
-# #     temperature=0,
-# #     # other params...
-# # )
+# llm=huggingface_pipeline_integration.model()
+llm = ChatOllama(
+     model="llama3.2:3b",
+     temperature=0,
+    # other params...
+ )
 search_agent=initialize_agent(tools,llm,agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,handling_parsing_errors=True)
 def chain1(retriever):
     # Define the query prompt
